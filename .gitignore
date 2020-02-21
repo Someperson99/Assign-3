@@ -123,3 +123,6 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Assign 3
+DEV/
