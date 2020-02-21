@@ -1,4 +1,7 @@
 # index builder
+import os.path
+import os
+
 class Posting:
     def __init__(self, docid, tfidf, fields):
         self.docid = docid
@@ -12,3 +15,9 @@ class Posting:
 # TODO index construction procedure
 def build_index(txt_docs: set()) -> dict():
     return dict()
+
+
+if __name__ == "__main__":
+    pass
+
+
