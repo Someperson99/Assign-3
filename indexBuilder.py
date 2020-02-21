@@ -1,6 +1,4 @@
 # index builder
-import os.path
-import os
 
 class Posting:
     def __init__(self, docid, tfidf, fields):
