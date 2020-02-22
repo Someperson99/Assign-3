@@ -1,6 +1,7 @@
 import os
 import os.path
 import json
+from bs4 import BeautifulSoup
 
 
 def get_subdirectory_paths() -> list:
@@ -14,11 +15,11 @@ def get_subdirectory_paths() -> list:
 
 def read_json_files(path: str) -> str:
     '''given a path to a json file, the funtion will read the json file and return
-    the json as a string'''
+    the url of the json file as well as the content from the url in a tuple'''
     f = open(path, 'r')
-    html_data = f.readline()
+    html_data = json.load(f)
     f.close()
-    return html_data
+    return (html_data['url'], html_data['content'])
 
 def get_all_jsons() -> dict:
     '''generator function that will yield a site's json information after
@@ -30,10 +31,15 @@ def get_all_jsons() -> dict:
         for site in json_paths:
             yield read_json_files(sub_domain + "\\" + site)
 
-# for i in get_all_jsons():
-#     print(i)
-#     asd = input()
-
+for i in get_all_jsons():
+    soup = BeautifulSoup(i[1], features="html.parser")
+    title = soup.title.string.strip()
+    content = ""
+    for para in soup.find_all('p'):
+        content += str(para.text)
+    content = title + content
+    print(content)
+    asdf = input()
 
 # sub_domain_jsons =  {   sub_domain_key : [  json_file1, json_file2, ....]
 #                     }
@@ -46,3 +52,5 @@ def get_all_jsons() -> dict:
 #
 # inv_index2 = {0, ics.uci.edu,
 #               1, stat.uci.edu}
+
+#C:\Users\geryj\Documents\DEV
