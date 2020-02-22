@@ -19,6 +19,7 @@ def build_index(docs: dict()) -> dict():
             if token not in index:
                 index[token] = [Posting(doc_num, 1)]
             else:
+                # if the current doc id is the same, update freqcount (no need to create new Posting object)
                 if (index[token][-1]).docid == doc_num:
                     (index[token][-1]).tfidf = (index[token][-1]).tfidf + 1
                 else:
@@ -29,3 +30,4 @@ def build_index(docs: dict()) -> dict():
 # TODO parse document into tokens
 def parse(doc) -> list():
     return list()  # STUB
+  
