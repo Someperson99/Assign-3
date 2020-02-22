@@ -24,17 +24,25 @@ def get_all_jsons() -> dict:
     '''generator function that will yield a site's json information after
     going through each subdomain'''
     sub_domains = get_subdirectory_paths()
-    sub_domain_jsons = {}
-    site_jsons = []
 
     for sub_domain in sub_domains:
-        sub_domain_key = sub_domain.split('\\')[-1]
         json_paths = [i for i in os.listdir(sub_domain)]
         for site in json_paths:
-            site_jsons.append(read_json_files(sub_domain + "\\" + site))
-        sub_domain_jsons[sub_domain_key] = site_jsons
-        yield sub_domain_jsons
-        sub_domain_jsons = {}
+            yield read_json_files(sub_domain + "\\" + site)
+
+# for i in get_all_jsons():
+#     print(i)
+#     asd = input()
 
 
-
+# sub_domain_jsons =  {   sub_domain_key : [  json_file1, json_file2, ....]
+#                     }
+#
+#
+# json_file1 = {url: ics.uci.edu, content: html_content}
+#
+# inv_index { word: doc1, doc2, ...
+#             word2: doc 3, doc1}
+#
+# inv_index2 = {0, ics.uci.edu,
+#               1, stat.uci.edu}
