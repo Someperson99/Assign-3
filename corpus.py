@@ -14,11 +14,11 @@ def get_subdirectory_paths() -> list:
 
 def read_json_files(path: str) -> str:
     '''given a path to a json file, the funtion will read the json file and return
-    the json as a string'''
+    the url of the json file as well as the content from the url in a tuple'''
     f = open(path, 'r')
-    html_data = f.readline()
+    html_data = json.load(f)
     f.close()
-    return html_data
+    return (html_data['url'], html_data['content'])
 
 def get_all_jsons() -> dict:
     '''generator function that will yield a site's json information after
