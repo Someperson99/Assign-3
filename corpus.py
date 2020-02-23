@@ -1,5 +1,7 @@
 import os
 import os.path
+from pathlib import Path
+
 import json
 from bs4 import BeautifulSoup
 import bs4 as bs
@@ -39,7 +41,14 @@ def get_all_jsons() -> dict:
             yield read_json_files(sub_domain + "\\" + site)
 
 
-# not sure to remove the stop word or leave it 
+
+
+
+
+
+# need to remove the stop words and add stemmer
+#Anyone know a good liberary to use stemmer
+
 def tokenize_without_stopwords(text : "str") -> list:
     data = []
     newList = []
@@ -63,45 +72,63 @@ def computeWordFrequencies(lst : list ) -> dict:
     
     return d
 
+def index_builder(d : 'obj') -> None:
+    doc_id = 0
+    freq = 0
+    duc_num = 0
+
+    dic_original = dict() # main dictionary
+    dic_memory = dict()  # --> stays in mem (docId, url)
+    for x in d.iterdir():
+        if x.is_dir():
+            index_builder(x)
+        else:    
+            with open(x) as f:
+                d = json.load(f)
+# fill up the dic_mem
+                url = d["url"]
+                dic_memory[doc_id] = url
+
+                #print(url)
+# get content
+                content = d["content"]
+                soup = bs.BeautifulSoup(content,'lxml')
+                title =""
+                if (soup.title is not None and soup.title.string is not None):
+                           
+                    title = soup.title.string.strip()
+                content = ""
+                for para in soup.find_all('p'):
+                    content += str(para.text)
+                content = title + content
+#tokenize
+                lst = tokenize_without_stopwords(content)
+# To do positon i need to iterate throough list just to get position
+                dict_temp = dict()
+                dict_temp = computeWordFrequencies(lst)
+
+#unload to orginal(word,[])  from temp(word,count) which has all the word from current json
+
+                for new_word in dict_temp:
+                    freq = dict_temp[new_word]
+                    myObj = Posting(doc_id,freq)
+                    temp_lst = []
+                    temp_lst.append(myObj)
+                    if new_word not in dic_original:
+                        dic_original[new_word] = temp_lst
+
+                    else:
+                        dic_original[new_word].append(temp_lst) 
+#iteraton ended 
+        doc_id += 1
+        for m in dic_original:
+            print(m, dic_original[m])
+        np = input()
 
 
 
-"""  
-Main starts here 
-it will print the list of tuples 
-"""
-doc_id = 0
-freq = 0
+# i probebly need the function somewhere close to the end 
 
-beautiful_list = []  #--> list of tuples that goes to the disc
-dic_memory = dict()  # --> stays in mem (docId, url)
-for i in get_all_jsons():
-    index_dic = dict()
-    lst = []
-
-    soup = BeautifulSoup(i[1], features="html.parser")
-    title = soup.title.string.strip()
-    content = ""
-    for para in soup.find_all('p'):
-        content += str(para.text)
-    content = title + content
-    lst = tokenize_without_stopwords(content)
-    # To do positon i need to iterate throough list just to get position
-    dict_temp = dict()
-    dict_temp = computeWordFrequencies(lst)
-    for d in dict_temp:
-        freq = dict_temp[d]
-        myObj = Posting(doc_id,freq)
-        index_dic[d] = myObj
-        # not add the dictioanry with key value(docId, position) to beautiful_list
-        beautiful_list.append(index_dic)
-    print(beautiful_list)
-
-    # End of iteration
-    doc_id += 1  # --> docId iteration
-
-    # might need to add the counter of 10 or less 
-    print(beautiful_list)
-
-    asdf = input()
-# C:\Users\mikeb\Desktop\Assign-3\developer\DEV
+# main from here -->
+p = Path('C:\\Users\ mkded\Desktop\Assign-3\developer\DEV')
+index_builder(p)
