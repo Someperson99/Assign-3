@@ -27,7 +27,7 @@ def read_json_files(path: str) -> str:
 
     content = ""
     for para in soup.find_all('p'):
-        content += str(para)
+        content += str(para.text)
 
 
     return (html_data['url'], title + content)
@@ -40,7 +40,7 @@ def get_all_jsons() -> dict:
     for sub_domain in sub_domains:
         json_paths = [i for i in os.listdir(sub_domain)]
         for site in json_paths:
-            yield read_json_files(sub_domain + "\\" + site)
+            yield read_json_files(sub_domain + "/" + site)
 
 # for i in get_all_jsons():
 #     print(i)
