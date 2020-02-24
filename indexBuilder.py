@@ -19,7 +19,7 @@ def build_index():
             print(mem_index_dict)
             write_to_file(mem_index_dict)
             mem_index_dict = dict()
-        tokens = parse(i)
+        tokens = parse(i[1])
         for token in tokens:
             if token not in mem_index_dict:
                 mem_index_dict[token] = [Posting(doc_num, 1)]
@@ -30,6 +30,7 @@ def build_index():
                 else:
                     mem_index_dict[token].append(Posting(doc_num, 1))
     write_to_file(mem_index_dict)
+
 
 
 """
@@ -44,4 +45,3 @@ def parse(text: str) -> list():
     for i in data:
         newList.append(i)
     return newList
-
