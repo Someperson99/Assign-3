@@ -40,5 +40,3 @@ def write_to_file(index: dict):
             curr_letter = i[0]
             letter_dict = {}
 
-
-
