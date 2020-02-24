@@ -1,6 +1,7 @@
 import os
 import os.path
 import json
+from bs4 import BeautifulSoup
 
 
 def get_subdirectory_paths() -> list:
@@ -18,7 +19,18 @@ def read_json_files(path: str) -> str:
     f = open(path, 'r')
     html_data = json.load(f)
     f.close()
-    return (html_data['url'], html_data['content'])
+    soup = BeautifulSoup(html_data['content'], features='html.parser')
+    try:
+        title = soup.title.string.strip()
+    except:
+        title = ""
+
+    content = ""
+    for para in soup.find_all('p'):
+        content += para
+
+
+    return (html_data['url'], title + content)
 
 def get_all_jsons() -> dict:
     '''generator function that will yield a site's json information after
