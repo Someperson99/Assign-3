@@ -27,7 +27,7 @@ def read_json_files(path: str) -> str:
 
     content = ""
     for para in soup.find_all('p'):
-        content += para
+        content += str(para)
 
 
     return (html_data['url'], title + content)

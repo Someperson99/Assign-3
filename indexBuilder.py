@@ -16,15 +16,18 @@ def build_index():
         doc_num = doc_num + 1
         if doc_num % 10 == 0:
             print(mem_index_dict)
-            yield mem_index_dict
-        tokens = parse(i)
+            asdf = input()
+            # yield mem_index_dict
+        tokens = parse(i[1])
         for token in tokens:
             if token not in mem_index_dict:
+                #if a token is not in the index
                 mem_index_dict[token] = [Posting(doc_num, 1)]
             else:
                 # if the current doc id is the same, update freqcount (no need to create new Posting object)
                 if (mem_index_dict[token][-1]).docid == doc_num:
-                    (mem_index_dict[token][-1]).tfidf = (mem_index_dict[token][-1]).tfidf + 1
+                    # (mem_index_dict[token][-1]).tfidf = (mem_index_dict[token][-1]).tfidf + 1
+                    (mem_index_dict[token][-1]).tfidf += 1
                 else:
                     mem_index_dict[token].append(Posting(doc_num, 1))
 
@@ -42,4 +45,5 @@ def parse(text: str) -> list():
         newList.append(i)
     return newList
 
-
+if __name__ == "__main__":
+    build_index()
