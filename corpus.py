@@ -4,11 +4,23 @@ import json
 from bs4 import BeautifulSoup
 
 
-def get_subdirectory_paths() -> list:
+DEV = "C:\\Users\\geryj\\Documents\\DEV"
+
+def get_subdirectory_paths(path = "") -> list:
     '''function will prompt users to put in path of DEV so that
     all of the subfolders of DEV which represent subdomains can be
     presented as paths'''
-    corpus_path = input()
+    if path != "":
+        corpus_path = path
+    else:
+        corpus_path = input()
+    invalid = True
+    while invalid:
+        if os.path.isdir(corpus_path):
+            invalid = False
+            break
+        print("Invalid path, please try again")
+        corpus_path = input()
     sub_domains = [i.path for i in os.scandir(corpus_path) if i.is_dir() and ".idea" not in i.path]
     return sub_domains
 
