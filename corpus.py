@@ -4,7 +4,6 @@ import json
 from bs4 import BeautifulSoup
 
 
-DEV = "C:\\Users\\geryj\\Documents\\DEV"
 
 def get_subdirectory_paths(path = "") -> list:
     '''function will prompt users to put in path of DEV so that
@@ -54,15 +53,6 @@ def get_all_jsons() -> dict:
         for site in json_paths:
             yield read_json_files(sub_domain + "/" + site)
 
-for i in get_all_jsons():
-    soup = BeautifulSoup(i[1], features="html.parser")
-    title = soup.title.string.strip()
-    content = ""
-    for para in soup.find_all('p'):
-        content += str(para.text)
-    content = title + content
-    print(content)
-    asdf = input()
 
 # sub_domain_jsons =  {   sub_domain_key : [  json_file1, json_file2, ....]
 #                     }
