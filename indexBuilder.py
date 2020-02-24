@@ -45,4 +45,3 @@ def parse(text: str) -> list():
         newList.append(i)
     return newList
 
-
