@@ -13,10 +13,12 @@ def build_index():
         # while docs:
         #     batch = get_batch(docs)
     for i in get_all_jsons():
+        print(i)
         doc_num = doc_num + 1
         if doc_num % 10 == 0:
             print(mem_index_dict)
-            yield mem_index_dict
+            write_to_file(mem_index_dict)
+            mem_index_dict = dict()
         tokens = parse(i)
         for token in tokens:
             if token not in mem_index_dict:
@@ -27,6 +29,7 @@ def build_index():
                     (mem_index_dict[token][-1]).tfidf = (mem_index_dict[token][-1]).tfidf + 1
                 else:
                     mem_index_dict[token].append(Posting(doc_num, 1))
+    write_to_file(mem_index_dict)
 
 
 """
