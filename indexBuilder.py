@@ -2,6 +2,7 @@
 import re
 from Posting import *
 from corpus import *
+from json_handler import *
 """
 Simple in memory inverted index, based off of lectures
 Does not have partial indexing yet
