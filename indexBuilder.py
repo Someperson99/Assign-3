@@ -47,9 +47,7 @@ def parse(text: str) -> list():
     for i in data:
         newList.append(i)
     return newList
-<<<<<<< HEAD
 
 if __name__ == "__main__":
     build_index()
-=======
->>>>>>> d429dfaa19e438acb60d80588706ab52eedead88
+
