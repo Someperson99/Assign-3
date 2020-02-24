@@ -9,11 +9,11 @@ Does not have partial indexing yet
 def build_index():
     doc_num = 0
     mem_index_dict = dict()
+    url_dict = {}
     # TODO partial indexing, but don't need for milestone 1
         # while docs:
         #     batch = get_batch(docs)
     for i in get_all_jsons():
-        print(i)
         doc_num = doc_num + 1
         if doc_num % 10 == 0:
             print(mem_index_dict)
