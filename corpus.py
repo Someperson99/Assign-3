@@ -72,14 +72,26 @@ def computeWordFrequencies(lst : list ) -> dict:
     
     return d
 
-def index_builder(d : 'obj') -> None:
-    doc_id = 0
-    freq = 0
-    duc_num = 0
+list_paths = []
+def add_paths(d : 'obj') -> list:
+    for x in d.iterdir():
+        if x.is_file():
+           list_paths.append(x)
+        elif x.is_dir():
+           add_paths(x)
+    
 
+def index_builder(d : 'obj') -> None:
+    invected_inex = 0
+    doc_id = 0
     dic_original = dict() # main dictionary
     dic_memory = dict()  # --> stays in mem (docId, url)
-    for x in d.iterdir():
+    doc_counter = 0  # counter for the number of docs
+    counter_iter = 10 # counter of the number of iterations < 10
+    
+    for x in list_paths:
+        if x == None:
+            continue
         if x.is_dir():
             index_builder(x)
         else:    
@@ -89,13 +101,12 @@ def index_builder(d : 'obj') -> None:
                 url = d["url"]
                 dic_memory[doc_id] = url
 
-                #print(url)
+                print(url)
 # get content
                 content = d["content"]
                 soup = bs.BeautifulSoup(content,'lxml')
                 title =""
-                if (soup.title is not None and soup.title.string is not None):
-                           
+                if (soup.title is not None and soup.title.string is not None):     
                     title = soup.title.string.strip()
                 content = ""
                 for para in soup.find_all('p'):
@@ -116,19 +127,35 @@ def index_builder(d : 'obj') -> None:
                     temp_lst.append(myObj)
                     if new_word not in dic_original:
                         dic_original[new_word] = temp_lst
-
                     else:
                         dic_original[new_word].append(temp_lst) 
+                
+# this is i where i will add the dump
+        
+
 #iteraton ended 
         doc_id += 1
+        doc_counter += 1
+        counter_iter -= 1
+
+
+# i need the dump_func()
+        if counter_iter == 0:
+            counter_iter = 10
+
+            """ 
+            ADD-->Here dump_func(dic_original) 
+            """
+            dic_original.clear()
+
+
         for m in dic_original:
             print(m, dic_original[m])
+
+
         np = input()
 
-
-
-# i probebly need the function somewhere close to the end 
-
-# main from here -->
-p = Path('C:\\Users\ mkded\Desktop\Assign-3\developer\DEV')
+p = Path('C:\\Users\mk\Desktop\Assign-3\developer\DEV')
+add_paths(p)
 index_builder(p)
+
