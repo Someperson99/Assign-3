@@ -106,15 +106,11 @@ def index_builder(d : 'obj') -> None:
                 content = title + content
 #tokenize
                 lst = tokenize_without_stopwords(content)
-# To do positon i need to iterate throough list just to get position
-                dict_temp = dict()
-                dict_temp = computeWordFrequencies(lst)
 
 #unload to orginal(word,[])  from temp(word,count) which has all the word from current json
 
-                for new_word in dict_temp:
-                    freq = dict_temp[new_word]
-                    lst[x] = dict_temp[word]
+                    dic_original = dict_temp[new_word]
+                    lst[x] = dic_original[word]
                     temp_lst = []
                     temp_lst.append(myObj)
                     if new_word not in dic_original:
