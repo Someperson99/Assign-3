@@ -3,6 +3,7 @@ import re
 from Posting import *
 from corpus import *
 from json_handler import *
+import sys
 """
 Simple in memory inverted index, based off of lectures
 Does not have partial indexing yet
@@ -10,6 +11,7 @@ Does not have partial indexing yet
 def build_index():
     doc_num = 0
     mem_index_dict = dict()
+    times_written_to_disk = 0
     url_dict = {}
     # TODO partial indexing, but don't need for milestone 1
         # while docs:
@@ -17,9 +19,10 @@ def build_index():
     for i in get_all_jsons():
         print(i[0])
         doc_num = doc_num + 1
-        if doc_num % 10 == 0:
-            write_to_file(mem_index_dict)
-            mem_index_dict = dict()
+        if sys.getsizeof(mem_index_dict) >= 100000:
+            write_to_file(mem_index_dict, times_written_to_disk)
+            mem_index_dict.clear()
+            times_written_to_disk += 1
         tokens = parse(i[1])
         for token in tokens:
             if token not in mem_index_dict:
