@@ -58,7 +58,6 @@ def tokenize_without_stopwords(text : "str") -> list:
     data = re.split('[^a-z]+',text.lower())
     data = list(filter(None, data))
     for i in data:
-        if i not in stop_words:
             newList.append(i)
     #c = set(data) - set(stop_words)   list(c)
     return newList
@@ -72,8 +71,9 @@ def computeWordFrequencies(lst : list ) -> dict:
     
     return d
 
-list_paths = []
+
 def add_paths(d : 'obj') -> list:
+    list_paths = []
     for x in d.iterdir():
         if x.is_file():
            list_paths.append(x)
@@ -90,20 +90,12 @@ def index_builder(d : 'obj') -> None:
     counter_iter = 10 # counter of the number of iterations < 10
     
     for x in list_paths:
-        if x == None:
-            continue
         if x.is_dir():
             index_builder(x)
         else:    
             with open(x) as f:
                 d = json.load(f)
-# fill up the dic_mem
-                url = d["url"]
-                dic_memory[doc_id] = url
-
                 print(url)
-# get content
-                content = d["content"]
                 soup = bs.BeautifulSoup(content,'lxml')
                 title =""
                 if (soup.title is not None and soup.title.string is not None):     
@@ -122,7 +114,7 @@ def index_builder(d : 'obj') -> None:
 
                 for new_word in dict_temp:
                     freq = dict_temp[new_word]
-                    myObj = Posting(doc_id,freq)
+                    lst[x] = dict_temp[word]
                     temp_lst = []
                     temp_lst.append(myObj)
                     if new_word not in dic_original:
