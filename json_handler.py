@@ -41,7 +41,12 @@ def write_to_file(index: dict):
             """
             if os.path.exists(curr_dir + "\\" + curr_letter + ".json"):
                 prev_index = get_json_content(curr_dir + "\\" + curr_letter + ".json")
-                prev_index.update(letter_dict)
+                for word, postings in letter_dict.items():
+                    for posting in postings:
+                        if posting in prev_index
+                            prev_index[word].append(posting)
+                        else:
+                            prev_index[word] = posting
                 letter_dict = prev_index
             create_json_file(curr_letter, letter_dict)
             curr_letter = i[0]
