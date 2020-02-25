@@ -43,7 +43,7 @@ def write_to_file(index: dict):
                 prev_index = get_json_content(curr_dir + "\\" + curr_letter + ".json")
                 for word, postings in letter_dict.items():
                     for posting in postings:
-                        if posting in prev_index:
+                        if word in prev_index:
                             prev_index[word].append(posting)
                         else:
                             prev_index[word] = posting
