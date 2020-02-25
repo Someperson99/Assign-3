@@ -2,11 +2,11 @@ import json
 import os
 
 
-def create_json_file(letter: str, index: dict):
+def create_json_file(letter: str, index: dict, version: int):
     '''given a starting letter and an index this function will create a
     json file nammed after the letter parameter and insert the index
     parameter into the json file'''
-    with open(letter + '.json', 'w') as file:
+    with open(letter + str(version) +  '.json', 'w') as file:
         json.dump(index, file)
     file.close()
 
@@ -20,7 +20,7 @@ def get_json_content(path: str) -> dict:
     return index
 
 
-def write_to_file(index: dict):
+def write_to_file(index: dict, times_written_to_disk: int):
     curr_dir = os.getcwd()
     letter_dict = {}
     curr_letter = ""
@@ -39,30 +39,31 @@ def write_to_file(index: dict):
             if os.path.exists(curr_dir + "/" + first_letter + ".json"):
                 prev_index = get_json_content(curr_dir + "/" + first_letter + ".json")
             """
-            if os.path.exists(curr_dir + "/" + curr_letter + ".json"):
-                prev_index = get_json_content(curr_dir + "/" + curr_letter + ".json")
-                for word, postings in letter_dict.items():
-                    for posting in postings:
-                        if word in prev_index:
-                            prev_index[word].append(posting)
-                        else:
-                            prev_index[word] = posting
-                letter_dict = prev_index
-            create_json_file(curr_letter, letter_dict)
+            # if os.path.exists(curr_dir + "\\" + curr_letter + ".json"):
+            #     prev_index = get_json_content(curr_dir + "\\" + curr_letter + ".json")
+            #     for word, postings in letter_dict.items():
+            #         for posting in postings:
+            #             if word in prev_index:
+            #                 prev_index[word].append(posting)
+            #             else:
+            #                 prev_index[word] = posting
+            #     letter_dict = prev_index
+            create_json_file(curr_letter, letter_dict, times_written_to_disk)
             curr_letter = i[0]
             letter_dict = {}
         letter_dict[i] = index[i]
 
-    if os.path.exists(curr_dir + "/" + curr_letter + ".json"):
-        prev_index = get_json_content(curr_dir + "/" + curr_letter + ".json")
-        for word, postings in letter_dict.items():
-            for posting in postings:
-                if word in prev_index:
-                    prev_index[word].append(posting)
-                else:
-                    prev_index[word] = posting
-        letter_dict = prev_index
-    create_json_file(curr_letter, letter_dict)
+    if curr_letter == "z":
+        # if os.path.exists(curr_dir + "\\" + curr_letter + ".json"):
+        #     prev_index = get_json_content(curr_dir + "\\" + curr_letter + ".json")
+        #     for word, postings in letter_dict.items():
+        #         for posting in postings:
+        #             if word in prev_index:
+        #                 prev_index[word].append(posting)
+        #             else:
+        #                 prev_index[word] = posting
+        #     letter_dict = prev_index
+        create_json_file(curr_letter, letter_dict, times_written_to_disk)
 
 
 
