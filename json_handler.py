@@ -30,12 +30,22 @@ def write_to_file(index: dict):
         elif curr_letter == first_letter:
             letter_dict[i] = index[i]
         else:
-            # if not os.path.exists(curr_dir + "\\" + first_letter + ".json"):
-            #     create_json_file(first_letter, letter_dict)
+
+            """
+            MAC USERS:
+            
             if os.path.exists(curr_dir + "/" + first_letter + ".json"):
                 prev_index = get_json_content(curr_dir + "/" + first_letter + ".json")
+            """
+            if os.path.exists(curr_dir + "\\" + first_letter + ".json"):
+                prev_index = get_json_content(curr_dir + "\\" + first_letter + ".json")
                 prev_index.update(letter_dict)
                 letter_dict = prev_index
             create_json_file(first_letter, letter_dict)
             curr_letter = i[0]
             letter_dict = {}
+
+
+
+
+

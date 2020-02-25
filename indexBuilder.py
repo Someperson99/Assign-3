@@ -10,10 +10,12 @@ Does not have partial indexing yet
 def build_index():
     doc_num = 0
     mem_index_dict = dict()
+    url_dict = {}
     # TODO partial indexing, but don't need for milestone 1
         # while docs:
         #     batch = get_batch(docs)
     for i in get_all_jsons():
+        print(i[0])
         doc_num = doc_num + 1
         if doc_num % 10 == 0:
             write_to_file(mem_index_dict)
@@ -34,7 +36,7 @@ def build_index():
 
 """
 Parsing text str to get a list of tokens.
-    Reused from part 2 Assignment 2 @miKeEt
+    Reused from part 2 Assignment 2 
 """
 def parse(text: str) -> list():
     data = []
@@ -46,3 +48,4 @@ def parse(text: str) -> list():
     return newList
 
 build_index()
+

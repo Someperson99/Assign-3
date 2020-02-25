@@ -1,11 +1,18 @@
 class Posting:
     def __init__(self, docid, tfidf, fields=None):
-        self.docid = docid
-        self.tfidf = tfidf  # use freqcounts for now
-        self.fields = fields
+        self.posting_tuple = (docid, tfidf, fields)
+        self.docid = self.posting_tuple[0]
+        self.tfidf = self.posting_tuple[1]  # use freqcounts for now
+        self.fields = self.posting_tuple[2]
 
     def __repr__(self):
         return str.format("DOC ID: {} \nCOUNT : {} \nFIELDS: {} \n", self.docid, self.tfidf, self.fields)
+
+    def __str__(self):
+        if self.fields is None:
+            return "(", + str(self.docid) + "," + str(self.tfidf) + ")"
+        else:
+            return "(", + str(self.docid) + "," + str(self.tfidf) + "," + str(self.fields) + ")"
 
     def get_docid(self):
         return self.docid
