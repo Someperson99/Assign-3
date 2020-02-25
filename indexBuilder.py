@@ -23,17 +23,20 @@ def build_index():
             write_to_file(mem_index_dict, times_written_to_disk)
             mem_index_dict.clear()
             times_written_to_disk += 1
-        tokens = parse(i[1])
+        tokens = i[1].split()
+        if len(tokens) > 5000:
+            tokens = tokens[:50001]
+        tokens = filter(parse, tokens)
         for token in tokens:
-            if token not in mem_index_dict:
+            if token.lower() not in mem_index_dict:
                 # WE ARE NOW USING LIST INSTEAD OF POSTING OBJECT
-                mem_index_dict[token] = [[doc_num, 1]]   # [DOCID, COUNT]
+                mem_index_dict[token.lower()] = [[doc_num, 1]]   # [DOCID, COUNT]
             else:
                 # if the current doc id is the same, update freqcount (no need to create new Posting object)
-                if (mem_index_dict[token][-1])[0] == doc_num:
-                    (mem_index_dict[token][-1])[1] = (mem_index_dict[token][-1])[1] + 1
+                if (mem_index_dict[token.lower()][-1])[0] == doc_num:
+                    (mem_index_dict[token.lower()][-1])[1] = (mem_index_dict[token.lower()][-1])[1] + 1
                 else:
-                    mem_index_dict[token].append([doc_num, 1])
+                    mem_index_dict[token.lower()].append([doc_num, 1])
     write_to_file(mem_index_dict, times_written_to_disk)
 
 
@@ -41,14 +44,8 @@ def build_index():
 Parsing text str to get a list of tokens.
     Reused from part 2 Assignment 2 
 """
-def parse(text: str) -> list():
-    data = []
-    newList = []
-    data = re.split('[^a-z]+', text.lower())
-    data = list(filter(None, data))
-    for i in data:
-        newList.append(i)
-    return newList
+def parse(text: str) -> bool:
+    return re.match(r"[a-z|A-Z]+", text)
 
 build_index()
 
