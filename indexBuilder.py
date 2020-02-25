@@ -15,30 +15,28 @@ def build_index():
         # while docs:
         #     batch = get_batch(docs)
     for i in get_all_jsons():
+        print(i[0])
         doc_num = doc_num + 1
         if doc_num % 10 == 0:
-            print(mem_index_dict)
             write_to_file(mem_index_dict)
             mem_index_dict = dict()
         tokens = parse(i[1])
         for token in tokens:
             if token not in mem_index_dict:
-                #if a token is not in the index
-                mem_index_dict[token] = [Posting(doc_num, 1)]
+                # WE ARE NOW USING LIST INSTEAD OF POSTING OBJECT
+                mem_index_dict[token] = [[doc_num, 1]]   # [DOCID, COUNT]
             else:
                 # if the current doc id is the same, update freqcount (no need to create new Posting object)
-                if (mem_index_dict[token][-1]).docid == doc_num:
-                    # (mem_index_dict[token][-1]).tfidf = (mem_index_dict[token][-1]).tfidf + 1
-                    (mem_index_dict[token][-1]).tfidf += 1
+                if (mem_index_dict[token][-1])[0] == doc_num:
+                    (mem_index_dict[token][-1])[1] = (mem_index_dict[token][-1])[1] + 1
                 else:
-                    mem_index_dict[token].append(Posting(doc_num, 1))
+                    mem_index_dict[token].append([doc_num, 1])
     write_to_file(mem_index_dict)
-
 
 
 """
 Parsing text str to get a list of tokens.
-    Reused from part 2 Assignment 2 @miKeEt
+    Reused from part 2 Assignment 2 
 """
 def parse(text: str) -> list():
     data = []
@@ -49,6 +47,5 @@ def parse(text: str) -> list():
         newList.append(i)
     return newList
 
-if __name__ == "__main__":
-    build_index()
+build_index()
 
