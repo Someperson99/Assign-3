@@ -19,7 +19,7 @@ def build_index():
     for i in get_all_jsons():
         print(i[0])
         doc_num = doc_num + 1
-        if sys.getsizeof(mem_index_dict) >= 100000:
+        if sys.getsizeof(mem_index_dict) >= 500000:
             write_to_file(mem_index_dict, times_written_to_disk)
             mem_index_dict.clear()
             times_written_to_disk += 1
