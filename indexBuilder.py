@@ -27,10 +27,11 @@ def build_index():
         if len(tokens) > 5000:
             tokens = tokens[:50001]
         tokens = filter(parse, tokens)
-        for token in tokens:
-            if token.lower() not in mem_index_dict:
+        for token_index in range(len(tokens)):
+            token = tokens[token_index]
+            if tokens[token].lower() not in mem_index_dict:
                 # WE ARE NOW USING LIST INSTEAD OF POSTING OBJECT
-                mem_index_dict[token.lower()] = [[doc_num, 1]]   # [DOCID, COUNT]
+                mem_index_dict[token.lower()] = [[doc_num, 1, token_index]]   # [DOCID, COUNT, POSITION]
             else:
                 # if the current doc id is the same, update freqcount (no need to create new Posting object)
                 if (mem_index_dict[token.lower()][-1])[0] == doc_num:
