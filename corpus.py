@@ -40,8 +40,8 @@ def read_json_files(path: str) -> str:
     for para in soup.find_all('p'):
         content += str(para.text)
 
-
-    return (html_data['url'], title + content)
+    # LETS SAVE TITLE SEPARATELY SO WE CAN USE IT FOR THE GUI <3
+    return (html_data['url'], title, content)
 
 def get_all_jsons() -> dict:
     '''generator function that will yield a site's json information after
@@ -54,16 +54,3 @@ def get_all_jsons() -> dict:
             yield read_json_files(sub_domain + "/" + site)
 
 
-# sub_domain_jsons =  {   sub_domain_key : [  json_file1, json_file2, ....]
-#                     }
-#
-#
-# json_file1 = {url: ics.uci.edu, content: html_content}
-#
-# inv_index { word: doc1, doc2, ...
-#             word2: doc 3, doc1}
-#
-# inv_index2 = {0, ics.uci.edu,
-#               1, stat.uci.edu}
-
-#C:\Users\geryj\Documents\DEV

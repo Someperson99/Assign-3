@@ -9,8 +9,9 @@ from PyQt5.QtWidgets import QLineEdit
 from PyQt5.QtWidgets import QLabel
 
 import search
-
-
+from json_handler import get_json_content
+import os
+from time import time
 
 class HelloWindow(QMainWindow):
     def __init__(self):
@@ -46,18 +47,28 @@ class HelloWindow(QMainWindow):
 
         self.body = QLabel(self)
         self.body.setText('results: ')
-        self.body.move(35, 80)
-        self.body.resize(400,200)
+        self.body.move(35, 65)
+
 
     def clickMethod(self):
         print('Searching ' + self.line.text())
         self.display()
 
     def display(self):
-        result = "we should display url later but i dont have that rn\nresults: \n"
-        for (k,v) in sorted(search.get_tfidf(search.get_postings(self.line.text())).items(), key=lambda kv: kv[1], reverse=True)[0:10]:
-            result += "DOC ID: " + str(k) + "\n"
+        result = "Searching " + self.line.text().lower() + "... \t results: \n\n"
+        current_dir = os.getcwd()
+        json = get_json_content(current_dir + "/results/urldict.json")
+        x1 = time()
+        for (k, v) in sorted(search.get_tfidf(search.get_postings(self.line.text().lower())).items(), key=lambda kv: kv[1], reverse=True)[0:10]:
+            title = json[str(k)][1].replace("\n", '')[:180]
+            result += "URL:     " + json[str(k)][0] + "\n" + "TITLE:  " + title + "\n\n"
+        x2 = time()
+        print(x2-x1)
+        result+= "time taken to search: " + str((x2-x1))
         self.body.setText(result)
+        self.body.move(5, -150)
+        self.body.resize(1500,1000)
+
 
 
 
