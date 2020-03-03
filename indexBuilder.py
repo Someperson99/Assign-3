@@ -24,7 +24,6 @@ def build_index():
             write_to_file(mem_index_dict, times_written_to_disk)
             mem_index_dict.clear()
             times_written_to_disk += 1
-
         tokens = parse(i[0] + " " + i[1])
         for token in tokens:
             if token.lower() not in mem_index_dict:
@@ -37,7 +36,7 @@ def build_index():
                 else:
                     mem_index_dict[token.lower()].append([doc_num, 1])
     write_to_file(mem_index_dict, times_written_to_disk)
-    with open('/Users/allysonyamasaki/PycharmProjects/Assign-3/results/urldict.json', 'w') as file:
+    with open('urldict.json', 'w') as file:
         json.dump(url_dict, file)
 
 
