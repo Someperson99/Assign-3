@@ -8,7 +8,7 @@ import math
 def get_postings(word:str) -> list:
     '''given a word this function will find all postings from the index, assuming
     it has already been created'''
-    if ("AND" in word):
+    if ("AND" in word or " "):
         query = word.replace(" AND", "").lower().split()
     else:
         query = [word.lower()]
@@ -19,19 +19,43 @@ def get_postings(word:str) -> list:
     all_postings = []
     for letter in first_letter:
         num = 0
+        postings = []
         target_path = current_dir + "/" + letter + str(num) + ".json"
         valid_path = os.path.exists(target_path)
         while valid_path:
             json_content = get_json_content(current_dir + "/" + letter + str(num) + ".json")
             if query[index] in json_content:
-                all_postings.extend(json_content[query[index]])
+                postings.extend(json_content[query[index]])
             num += 1
             valid_path = os.path.exists(current_dir + "/" + letter + str(num) + ".json")
         index += 1
+        all_postings.append(postings)
     return all_postings
 
+def merge_postings(all_postings: list) -> list:
+    result = []
+    all_postings.sort(key = len)
+    x = 0
+    y = 0
+    shortest = all_postings[0]
+    if len(all_postings) < 2:
+        for postings in all_postings[0]:
+            result.append(postings)
+        return result
+    for postings in all_postings[1:]:
+        while x < len(shortest):
+            if shortest[x][0] == postings[y][0]:
+                result.append([shortest[x][0], shortest[x][1] + postings[y][1]])
+                y += 1
+                x += 1
+            elif shortest[x][0] > postings[y][0]:
+                y += 1
+            elif shortest[x][0] < postings[y][0]:
+                x += 1
+    return result
+
 x1 = time()
-print(get_postings("computer AND science"))
+print(merge_postings(get_postings("computer AND science")))
 x2 = time()
 
 print(x2-x1)
@@ -65,6 +89,6 @@ def get_tfidf(postings_list: list) -> dict:
 
 
 x3 = time()
-#print(sorted(get_tfidf(get_postings("computer AND science")).items(), key=lambda kv: kv[1], reverse=True))
+print(sorted(get_tfidf(merge_postings(get_postings("computer AND science"))).items(), key=lambda kv: kv[1], reverse=True))
 x4 = time()
 print(x4-x3)
