@@ -6,7 +6,7 @@ def create_json_file(letter: str, index: dict, version: int):
     '''given a starting letter and an index this function will create a
     json file nammed after the letter parameter and insert the index
     parameter into the json file'''
-    with open(letter + str(version) +  '.json', 'w') as file:
+    with open("/Users/allysonyamasaki/PycharmProjects/Assign-3/results/"+letter + str(version) +  '.json', 'w') as file:
         json.dump(index, file)
     file.close()
 
