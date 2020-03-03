@@ -55,11 +55,12 @@ class HelloWindow(QMainWindow):
         self.display()
 
     def display(self):
-        result = "Searching " + self.line.text().lower() + "... \t results: \n\n"
         current_dir = os.getcwd()
         json = get_json_content(current_dir + "/results/urldict.json")
         x1 = time()
-        for (k, v) in sorted(search.get_tfidf(search.get_postings(self.line.text().lower())).items(), key=lambda kv: kv[1], reverse=True)[0:10]:
+        list_posting = search.get_tfidf(search.merge_postings(search.get_postings(self.line.text().lower()))).items()
+        result = "Searching " + self.line.text().lower() + "... " + str(len(list_posting)) + " total results found. Top 10 results: \n\n"
+        for (k, v) in sorted(list_posting, key=lambda kv: kv[1], reverse=True)[0:10]:
             title = json[str(k)][1].replace("\n", '')[:180]
             result += "URL:     " + json[str(k)][0] + "\n" + "TITLE:  " + title + "\n\n"
         x2 = time()
