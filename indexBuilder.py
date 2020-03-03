@@ -12,7 +12,7 @@ def build_index():
     doc_num = 0
     mem_index_dict = dict()
     times_written_to_disk = 0
-    url_dict = {}
+    # url_dict = {}
     # TODO partial indexing, but don't need for milestone 1
         # while docs:
         #     batch = get_batch(docs)
@@ -20,6 +20,7 @@ def build_index():
         print(i[0])
         doc_num = doc_num + 1
         if sys.getsizeof(mem_index_dict) >= 500000:
+        #if mem_index_dict is larger than 500kb
             write_to_file(mem_index_dict, times_written_to_disk)
             mem_index_dict.clear()
             times_written_to_disk += 1
@@ -27,17 +28,18 @@ def build_index():
         if len(tokens) > 5000:
             tokens = tokens[:50001]
         tokens = filter(parse, tokens)
-        for token_index in range(len(tokens)):
-            token = tokens[token_index]
-            if tokens[token].lower() not in mem_index_dict:
+        token_position = 0
+        for token in tokens:
+            if token.lower() not in mem_index_dict:
                 # WE ARE NOW USING LIST INSTEAD OF POSTING OBJECT
-                mem_index_dict[token.lower()] = [[doc_num, 1, token_index]]   # [DOCID, COUNT, POSITION]
+                mem_index_dict[token.lower()] = [[doc_num, 1]]   # [DOCID, COUNT]
             else:
                 # if the current doc id is the same, update freqcount (no need to create new Posting object)
                 if (mem_index_dict[token.lower()][-1])[0] == doc_num:
                     (mem_index_dict[token.lower()][-1])[1] = (mem_index_dict[token.lower()][-1])[1] + 1
                 else:
                     mem_index_dict[token.lower()].append([doc_num, 1])
+            token_position += 1
     write_to_file(mem_index_dict, times_written_to_disk)
 
 

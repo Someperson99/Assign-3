@@ -25,10 +25,7 @@ def read_json_files(path: str) -> str:
     except:
         title = ""
 
-    content = ""
-    for para in soup.find_all('p'):
-        content += str(para.text)
-
+    content = soup.get_text(strip=True)
 
     return (html_data['url'], title + content)
 
