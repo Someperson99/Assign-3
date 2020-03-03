@@ -3,6 +3,7 @@ from json_handler import get_json_content
 from time import time
 import string
 import math
+from collections import OrderedDict
 
 
 def get_postings(word:str) -> list:
@@ -33,35 +34,41 @@ def get_postings(word:str) -> list:
     return all_postings
 
 def merge_postings(all_postings: list) -> list:
-    result = []
+    shortest = {}
     all_postings.sort(key = len)
-    x = 0
-    y = 0
-    shortest = all_postings[0]
+    x = 1
+    for postings in all_postings[0]:
+        shortest[postings[0]] = postings[1]
     if len(all_postings) < 2:
-        for postings in all_postings[0]:
-            result.append(postings)
-        return result
+        return shortest
+    t = {}
     for postings in all_postings[1:]:
-        while x < len(shortest):
-            if shortest[x][0] == postings[y][0]:
-                result.append([shortest[x][0], shortest[x][1] + postings[y][1]])
-                y += 1
-                x += 1
-            elif shortest[x][0] > postings[y][0]:
-                y += 1
-            elif shortest[x][0] < postings[y][0]:
-                x += 1
-    return result
+        temp = {}
+        result = {}
+        for post in postings:
+            temp[post[0]] = post[1]
+        if x == 1:
+            for key in shortest.keys():
+                if key in temp.keys():
+                    result[key] = shortest[key] + temp[key]
+        else:
+            for key in t.keys():
+                if key in temp.keys():
+                    result[key] = t[key] + temp[key]
+        for key in result.keys():
+            t[key] = result[key]
+        x += 1
+        if x >= len(all_postings):
+            print(len(result))
+            return result
 
 x1 = time()
-print(merge_postings(get_postings("computer AND science")))
+print(merge_postings(get_postings("master of software engineering")))
 x2 = time()
 
 print(x2-x1)
 
-
-def get_tfidf(postings_list: list) -> dict:
+def get_tfidf(postings_dict: dict) -> dict:
     """ get tfidf score given a word AT SEARCH TIME
         The tf-idfweight of a term is the product of its tfweight and its idfweight.
         wt,d= (1+log(tft,d)) x log(N/dft)
@@ -81,14 +88,14 @@ def get_tfidf(postings_list: list) -> dict:
             num += 1
             valid_path = os.path.exists(current_dir + "/" + i + str(num) + ".json")
 
-    document_frequency = len(postings_list)  # num of documents that contain token
+    document_frequency = len(postings_dict)  # num of documents that contain token
     idf = math.log((num_documents / document_frequency), 10)
-    for (docID, freq) in postings_list:
-        tfidf[docID] = (1 + math.log(freq, 10)) * idf
+    for key in postings_dict.keys():
+        tfidf[key] = (1 + math.log(postings_dict[key], 10)) * idf
     return tfidf
 
 
 x3 = time()
-print(sorted(get_tfidf(merge_postings(get_postings("computer AND science"))).items(), key=lambda kv: kv[1], reverse=True))
+print(sorted(get_tfidf(merge_postings(get_postings("master of software engineering"))).items(), key=lambda kv: kv[1], reverse=True))
 x4 = time()
 print(x4-x3)
