@@ -4,51 +4,65 @@ from Posting import *
 from corpus import *
 from json_handler import *
 import sys
+
 """
 Simple in memory inverted index, based off of lectures
 Does not have partial indexing yet
 """
+
+
 def build_index():
     doc_num = 0
     mem_index_dict = dict()
     times_written_to_disk = 0
-    # url_dict = {}
-    # TODO partial indexing, but don't need for milestone 1
-        # while docs:
-        #     batch = get_batch(docs)
+    url_dict = dict()
     for i in get_all_jsons():
         print(i[0])
         doc_num = doc_num + 1
-        if sys.getsizeof(mem_index_dict) >= 500000:
-        #if mem_index_dict is larger than 500kb
+        url_dict[doc_num] = (i[0], i[1])
+        if sys.getsizeof(mem_index_dict) >= 200000:
             write_to_file(mem_index_dict, times_written_to_disk)
             mem_index_dict.clear()
             times_written_to_disk += 1
-        tokens = i[1].split()
-        if len(tokens) > 5000:
-            tokens = tokens[:50001]
-        tokens = filter(parse, tokens)
-        token_position = 0
+
+        tokens = parse(i[0] + " " + i[1])
         for token in tokens:
             if token.lower() not in mem_index_dict:
                 # WE ARE NOW USING LIST INSTEAD OF POSTING OBJECT
-                mem_index_dict[token.lower()] = [[doc_num, 1]]   # [DOCID, COUNT]
+                mem_index_dict[token.lower()] = [[doc_num, 1]]  # [DOCID, COUNT]
             else:
                 # if the current doc id is the same, update freqcount (no need to create new Posting object)
                 if (mem_index_dict[token.lower()][-1])[0] == doc_num:
                     (mem_index_dict[token.lower()][-1])[1] = (mem_index_dict[token.lower()][-1])[1] + 1
                 else:
                     mem_index_dict[token.lower()].append([doc_num, 1])
-            token_position += 1
     write_to_file(mem_index_dict, times_written_to_disk)
+    with open('/Users/allysonyamasaki/PycharmProjects/Assign-3/results/urldict.json', 'w') as file:
+        json.dump(url_dict, file)
+
 
 
 """
 Parsing text str to get a list of tokens.
-    Reused from part 2 Assignment 2 
+
 """
-def parse(text: str) -> bool:
-    return re.match(r"[a-z|A-Z]+", text)
+def parse(word: str) -> list:
+    """ takes in a string that might not be valid,
+    so separate by alpha numeric, returns a list of new tokens"""
+    result = list()
+    tempWord = ""
+    for char in word:
+        if char.isalnum():
+            tempWord += char
+        else:
+            if tempWord != '':
+                if len(result) > 3000:
+                    return result
+                result.append(tempWord.lower())
+                tempWord = ""
+    if tempWord != "":
+        result.append(tempWord.lower())
+    return result
+
 
 build_index()
-
