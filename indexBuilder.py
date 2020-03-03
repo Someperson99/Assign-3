@@ -19,13 +19,13 @@ def build_index():
     for i in get_all_jsons():
         print(i[0])
         doc_num = doc_num + 1
-        url_dict[doc_num] = (i[0], i[1])
+        url_dict[doc_num] = (i[0], i[1][:180])
         if sys.getsizeof(mem_index_dict) >= 200000:
             write_to_file(mem_index_dict, times_written_to_disk)
             mem_index_dict.clear()
             times_written_to_disk += 1
 
-        tokens = parse(i[0] + " " + i[1])
+        tokens = parse(i[1] + " " + i[2])
         for token in tokens:
             if token.lower() not in mem_index_dict:
                 # WE ARE NOW USING LIST INSTEAD OF POSTING OBJECT
