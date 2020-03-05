@@ -14,7 +14,6 @@ def get_postings(word:str) -> list:
     else:
         query = [word.lower()]
     first_letter = list(q[0] for q in query)
-    
     index = 0
     current_dir = os.getcwd()
     all_postings = []
@@ -26,7 +25,8 @@ def get_postings(word:str) -> list:
         while valid_path:
             json_content = get_json_content(current_dir + "/" + letter + str(num) + ".json")
             if query[index] in json_content:
-                postings.extend(json_content[query[index]])
+                for t in json_content[query[index]]:
+                    postings.append((t[0], t[1]))
             num += 1
             valid_path = os.path.exists(current_dir + "/" + letter + str(num) + ".json")
         index += 1
@@ -34,36 +34,21 @@ def get_postings(word:str) -> list:
     return all_postings
 
 def merge_postings(all_postings: list) -> list:
-    shortest = {}
+    # need all_postings to be a list of lists of tuples
     all_postings.sort(key = len)
-    x = 1
-    for postings in all_postings[0]:
-        shortest[postings[0]] = postings[1]
-    if len(all_postings) < 2:
-        return shortest
-    t = {}
+    t = dict(all_postings[0])
     for postings in all_postings[1:]:
-        temp = {}
+        temp = dict(postings)
         result = {}
-        for post in postings:
-            temp[post[0]] = post[1]
-        if x == 1:
-            for key in shortest.keys():
-                if key in temp.keys():
-                    result[key] = shortest[key] + temp[key]
-        else:
-            for key in t.keys():
-                if key in temp.keys():
-                    result[key] = t[key] + temp[key]
-        for key in result.keys():
-            t[key] = result[key]
-        x += 1
-        if x >= len(all_postings):
-            print(len(result))
-            return result
+        match = set(temp.keys()).intersection(t.keys())
+        for key in match:
+            result[key] = temp[key] + t[key]
+        t = result.copy()
+    print(len(result))
+    return result
 
 x1 = time()
-print(merge_postings(get_postings("master of software engineering")))
+print(merge_postings(get_postings("cristina machine learning")))
 x2 = time()
 
 print(x2-x1)
@@ -96,6 +81,6 @@ def get_tfidf(postings_dict: dict) -> dict:
 
 
 x3 = time()
-print(sorted(get_tfidf(merge_postings(get_postings("master of software engineering"))).items(), key=lambda kv: kv[1], reverse=True))
+print(sorted(get_tfidf(merge_postings(get_postings("cristina machine learning"))).items(), key=lambda kv: kv[1], reverse=True))
 x4 = time()
 print(x4-x3)
