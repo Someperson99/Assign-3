@@ -4,7 +4,7 @@ from Posting import *
 from corpus import *
 from json_handler import *
 import sys
-
+import storePostings
 """
 Simple in memory inverted index, based off of lectures
 Does not have partial indexing yet
@@ -21,7 +21,8 @@ def build_index():
         doc_num = doc_num + 1
         url_dict[doc_num] = (i[0], i[1][:180])
         if sys.getsizeof(mem_index_dict) >= 200000:
-            write_to_file(mem_index_dict, times_written_to_disk)
+            # write_to_file(mem_index_dict, times_written_to_disk)
+            storePostings.store_postings(mem_index_dict)
             mem_index_dict.clear()
             times_written_to_disk += 1
 
@@ -37,8 +38,9 @@ def build_index():
                 else:
                     mem_index_dict[token.lower()].append([doc_num, 1])
     write_to_file(mem_index_dict, times_written_to_disk)
-    with open('/Users/allysonyamasaki/PycharmProjects/Assign-3/results/urldict.json', 'w') as file:
+    with open('C:\\Users\\geryj\\Documents\\Index Copy\\urldict.json', 'w') as file:
         json.dump(url_dict, file)
+    file.close()
 
 
 

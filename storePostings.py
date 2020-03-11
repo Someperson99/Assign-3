@@ -2,9 +2,9 @@ import os
 
 def store_postings(postings_dict: dict):
     for word, postings in postings_dict.items():
-        path = word + ".txt"
-        if not os.path.exists(word + ".txt"):
-            f = open(word + ".txt", 'w')
+        path = "C:\\Users\\geryj\Documents\\Index Copy\\"
+        if not os.path.exists(path + word + ".txt"):
+            f = open(path + word + ".txt", 'w')
             f.close()
         postings_str = ""
         for posting in postings:
