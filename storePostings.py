@@ -6,7 +6,7 @@ def store_postings(postings_dict: dict):
         postings_str = ""
         for posting in postings:
             postings_str += str(posting[0]) + ":" + str(posting[1]) + ","
-        with open(path + word, 'a') as f:
+        with open(path + word + ".txt", 'a') as f:
             f.write(postings_str)
         f.close()
 
