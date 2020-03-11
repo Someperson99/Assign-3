@@ -33,10 +33,12 @@ def get_postings(word:str) -> list:
         all_postings.append(postings)
     return all_postings
 
-def merge_postings(all_postings: list) -> list:
+def merge_postings(all_postings: list) -> dict:
     # need all_postings to be a list of lists of tuples
     all_postings.sort(key = len)
     t = dict(all_postings[0])
+    if len(all_postings) < 2:
+        return t
     for postings in all_postings[1:]:
         temp = dict(postings)
         result = {}
@@ -48,7 +50,7 @@ def merge_postings(all_postings: list) -> list:
     return result
 
 x1 = time()
-print(merge_postings(get_postings("cristina machine learning")))
+print(merge_postings(get_postings("cristina")))
 x2 = time()
 
 print(x2-x1)
