@@ -5,10 +5,9 @@ from corpus import *
 from json_handler import *
 import sys
 import storePostings
-"""
-Simple in memory inverted index, based off of lectures
-Does not have partial indexing yet
-"""
+from nltk.stem import PorterStemmer
+
+stemmer = PorterStemmer()
 
 
 def build_index():
@@ -38,14 +37,14 @@ def build_index():
                 else:
                     mem_index_dict[token.lower()].append([doc_num, 1])
     storePostings.store_postings(mem_index_dict)
-    with open('C:\\Users\\geryj\\Documents\\Index Copy\\urldict.json', 'w') as file:
+    with open('/Users/allysonyamasaki/PycharmProjects/Assign-3/results/urldict.json', 'w') as file:
         json.dump(url_dict, file)
     file.close()
 
 
 
 """
-Parsing text str to get a list of tokens.
+Parsing text str to get a list of tokens. stems using ntlk module 
 
 """
 def parse(word: str) -> list:
@@ -60,7 +59,7 @@ def parse(word: str) -> list:
             if tempWord != '':
                 if len(result) > 3000:
                     return result
-                result.append(tempWord.lower())
+                result.append(stemmer.stem(tempWord.lower()))
                 tempWord = ""
     if tempWord != "":
         result.append(tempWord.lower())

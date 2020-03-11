@@ -1,10 +1,13 @@
 import math
 import storePostings
 import json
+from nltk.stem import PorterStemmer
+
+stemmer = PorterStemmer()
 
 #depending on where you have urldict.json stored, you're going
 #to want to change this
-path = "C:\\Users\\geryj\\Documents\\Index Copy\\"
+path = "/Users/allysonyamasaki/PycharmProjects/Assign-3/results/"
 
 def get_postings(word:str) -> list:
     '''given a word this function will find all postings from the index, assuming
@@ -20,7 +23,7 @@ def get_postings(word:str) -> list:
     for token in query:
         #retrieve all of the postings, put it into a list, and then
         #put it into res
-        res.append(storePostings.get_postings(token))
+        res.append(storePostings.get_postings(stemmer.stem(token)))
 
     return res
 

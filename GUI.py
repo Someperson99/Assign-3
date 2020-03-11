@@ -51,7 +51,7 @@ class HelloWindow(QMainWindow):
 
         #depending on where you have the urldict.json stored you're going to want
         #to change this
-        self.path = "C:\\Users\\geryj\\Documents\\Index Copy\\"
+        self.path = "/Users/allysonyamasaki/PycharmProjects/Assign-3/results/"
 
 
 
@@ -61,7 +61,7 @@ class HelloWindow(QMainWindow):
 
     def display(self):
         current_dir = os.getcwd()
-        json = get_json_content(path + "urldict.json")
+        json = get_json_content(self.path + "urldict.json")
         x1 = time()
         list_posting = search.get_tfidf(search.merge_postings(search.get_postings(self.line.text().lower()))).items()
         result = "Searching " + self.line.text().lower() + "... " + str(len(list_posting)) + " total results found. Top 10 results: \n\n"
