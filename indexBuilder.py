@@ -37,7 +37,7 @@ def build_index():
                     (mem_index_dict[token.lower()][-1])[1] = (mem_index_dict[token.lower()][-1])[1] + 1
                 else:
                     mem_index_dict[token.lower()].append([doc_num, 1])
-    write_to_file(mem_index_dict, times_written_to_disk)
+    storePostings.store_postings(mem_index_dict)
     with open('C:\\Users\\geryj\\Documents\\Index Copy\\urldict.json', 'w') as file:
         json.dump(url_dict, file)
     file.close()
