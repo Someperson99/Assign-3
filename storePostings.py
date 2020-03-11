@@ -11,6 +11,7 @@ def store_postings(postings_dict: dict):
             postings_str += str(posting[0]) + ":" + str(posting[1]) + ","
         with open(path + word, 'a') as f:
             f.write(postings_str)
+        f.close()
 
 
 def get_postings(word: str):
