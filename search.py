@@ -3,6 +3,7 @@ from json_handler import get_json_content
 from time import time
 import string
 import math
+import storePostings
 from collections import OrderedDict
 
 
@@ -13,38 +14,61 @@ def get_postings(word:str) -> list:
         query = word.replace(" AND", "").lower().split()
     else:
         query = [word.lower()]
-    first_letter = list(q[0] for q in query)
-    index = 0
-    current_dir = os.getcwd()
-    all_postings = []
-    for letter in first_letter:
-        num = 0
-        postings = []
-        target_path = current_dir + "/" + letter + str(num) + ".json"
-        valid_path = os.path.exists(target_path)
-        while valid_path:
-            json_content = get_json_content(current_dir + "/" + letter + str(num) + ".json")
-            if query[index] in json_content:
-                for t in json_content[query[index]]:
-                    postings.append((t[0], t[1]))
-            num += 1
-            valid_path = os.path.exists(current_dir + "/" + letter + str(num) + ".json")
-        index += 1
-        all_postings.append(postings)
-    return all_postings
+
+    res = []
+
+    for token in query:
+        res.append(storePostings.get_postings(token))
+
+    return res
+
+    # first_letter = list(q[0] for q in query)
+    # index = 0
+    # current_dir = os.getcwd()
+    # all_postings = []
+    # for letter in first_letter:
+    #     num = 0
+    #     postings = []
+    #     target_path = current_dir + "/" + letter + str(num) + ".json"
+    #     valid_path = os.path.exists(target_path)
+    #     while valid_path:
+    #         json_content = get_json_content(current_dir + "/" + letter + str(num) + ".json")
+    #         if query[index] in json_content:
+    #             for t in json_content[query[index]]:
+    #                 postings.append((t[0], t[1]))
+    #         num += 1
+    #         valid_path = os.path.exists(current_dir + "/" + letter + str(num) + ".json")
+    #     index += 1
+    #     all_postings.append(postings)
+    # return all_postings
 
 def merge_postings(all_postings: list) -> list:
     # need all_postings to be a list of lists of tuples
     all_postings.sort(key = len)
-    t = dict(all_postings[0])
+    t = {}
+    for posting in all_postings[0]:
+        post = posting.split(':')
+        if not len(post) == 1:
+            docID = int(post[0])
+            frequency = int(post[1])
+            t[docID] = frequency
+    # print(t, "this is t\n")
+    # t = dict(all_postings[0])
     for postings in all_postings[1:]:
-        temp = dict(postings)
+        temp = {}
+        for posting in postings:
+            post = posting.split(':')
+            if not len(post) == 1:
+                docID = int(post[0])
+                frequency = int(post[1])
+                temp[docID] = frequency
+        # print(temp, "this is temp\n")
         result = {}
         match = set(temp.keys()).intersection(t.keys())
         for key in match:
             result[key] = temp[key] + t[key]
         t = result.copy()
-    print(len(result))
+    # print(len(result))
     return result
 
 x1 = time()
@@ -74,6 +98,8 @@ def get_tfidf(postings_dict: dict) -> dict:
             valid_path = os.path.exists(current_dir + "/" + i + str(num) + ".json")
 
     document_frequency = len(postings_dict)  # num of documents that contain token
+    print(num_documents)
+    print(document_frequency)
     idf = math.log((num_documents / document_frequency), 10)
     for key in postings_dict.keys():
         tfidf[key] = (1 + math.log(postings_dict[key], 10)) * idf

@@ -1,4 +1,3 @@
-import os
 
 def store_postings(postings_dict: dict):
     for word, postings in postings_dict.items():
@@ -17,7 +16,9 @@ def store_postings(postings_dict: dict):
 
 
 def get_postings(word: str):
-    with open(word + ".txt", 'r') as f:
+    path = "C:\\Users\\geryj\Documents\\Index Copy\\"
+    file_name = word + ".txt"
+    with open(path + file_name, 'r') as f:
         res = f.readline().split(',')
     f.close()
     return res
