@@ -76,7 +76,8 @@ def get_tfidf(postings_dict: dict) -> dict:
     num_documents = int(list(res.keys())[-1])
 
     document_frequency = len(postings_dict)  # num of documents that contain token
-    idf = math.log((num_documents / document_frequency), 10)
+    if document_frequency > 0:
+        idf = math.log((num_documents / document_frequency), 10)
     for key in postings_dict.keys():
         tfidf[key] = (1 + math.log(postings_dict[key], 10)) * idf
     return tfidf
