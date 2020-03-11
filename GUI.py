@@ -49,6 +49,11 @@ class HelloWindow(QMainWindow):
         self.body.setText('results: ')
         self.body.move(35, 65)
 
+        #depending on where you have the corpus stored you're going to want
+        #to change this
+        self.path = "C:\\Users\\geryj\\Documents\\Index Copy\\"
+
+
 
     def clickMethod(self):
         print('Searching ' + self.line.text())
@@ -56,7 +61,7 @@ class HelloWindow(QMainWindow):
 
     def display(self):
         current_dir = os.getcwd()
-        json = get_json_content("C:\\Users\\geryj\\Documents\\Index Copy\\urldict.json")
+        json = get_json_content(path + "urldict.json")
         x1 = time()
         list_posting = search.get_tfidf(search.merge_postings(search.get_postings(self.line.text().lower()))).items()
         result = "Searching " + self.line.text().lower() + "... " + str(len(list_posting)) + " total results found. Top 10 results: \n\n"
