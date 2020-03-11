@@ -56,7 +56,7 @@ class HelloWindow(QMainWindow):
 
     def display(self):
         current_dir = os.getcwd()
-        json = get_json_content(current_dir + "/results/urldict.json")
+        json = get_json_content("C:\\Users\\geryj\\Documents\\Index Copy\\urldict.json")
         x1 = time()
         list_posting = search.get_tfidf(search.merge_postings(search.get_postings(self.line.text().lower()))).items()
         result = "Searching " + self.line.text().lower() + "... " + str(len(list_posting)) + " total results found. Top 10 results: \n\n"
