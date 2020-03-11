@@ -49,7 +49,7 @@ class HelloWindow(QMainWindow):
         self.body.setText('results: ')
         self.body.move(35, 65)
 
-        #depending on where you have the corpus stored you're going to want
+        #depending on where you have the urldict.json stored you're going to want
         #to change this
         self.path = "C:\\Users\\geryj\\Documents\\Index Copy\\"
 
