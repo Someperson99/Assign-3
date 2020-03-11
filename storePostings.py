@@ -15,4 +15,6 @@ def store_postings(postings_dict: dict):
 
 def get_postings(word: str):
     with open(word + ".txt", 'r') as f:
-        return f.readline()
+        res = f.readline().split()
+    f.close()
+    return res
