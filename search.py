@@ -2,6 +2,9 @@ import math
 import storePostings
 import json
 
+#depending on where you have urldict.json stored, you're going
+#to want to change this
+path = "C:\\Users\\geryj\\Documents\\Index Copy\\"
 
 def get_postings(word:str) -> list:
     '''given a word this function will find all postings from the index, assuming
@@ -67,7 +70,7 @@ def get_tfidf(postings_dict: dict) -> dict:
     #over here we are just opening up the json file that contains all of the docIDs
     #and extracting the largest docID from it, this will represent the number of files
     #since the docID is essentially a counter of documents
-    with open("C:\\Users\\geryj\\Documents\\Index Copy\\urldict.json", 'r') as f:
+    with open(path + "urldict.json", 'r') as f:
         res = json.load(f)
         f.close()
     num_documents = int(list(res.keys())[-1])
