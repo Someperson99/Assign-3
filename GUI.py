@@ -52,7 +52,7 @@ class HelloWindow(QMainWindow):
 
         #depending on where you have the urldict.json stored you're going to want
         #to change this
-        self.path = "/Users/allysonyamasaki/PycharmProjects/Assign-3/results/"
+        self.path = "C:\\Users\\geryj\\Documents\\Index Copy"
 
 
 
