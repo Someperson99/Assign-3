@@ -56,18 +56,23 @@ class HelloWindow(QMainWindow):
 
 
     def clickMethod(self):
+        self.body.setText("results: ")
         print('Searching ' + self.line.text())
         self.display()
 
     def display(self):
-        current_dir = os.getcwd()
-        json = get_json_content(path + "urldict.json")
+        # current_dir = os.getcwd()
+        json = get_json_content(self.path + "urldict.json")
         x1 = time()
         list_posting = search.get_tfidf(search.merge_postings(search.get_postings(self.line.text().lower()))).items()
-        result = "Searching " + self.line.text().lower() + "... " + str(len(list_posting)) + " total results found. Top 10 results: \n\n"
+
+        result = "Searching " + self.line.text().lower() + "... " + str(len(list_posting)) + \
+                 " total results found. Top 10 results: \n\n"
+
         for (k, v) in sorted(list_posting, key=lambda kv: kv[1], reverse=True)[0:10]:
             title = json[str(k)][1].replace("\n", '')[:180]
             result += "URL:     " + json[str(k)][0] + "\n" + "TITLE:  " + title + "\n\n"
+
         x2 = time()
         print(x2-x1)
         result+= "time taken to search: " + str((x2-x1))
