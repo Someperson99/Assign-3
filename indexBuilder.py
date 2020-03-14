@@ -37,7 +37,7 @@ def build_index():
                 else:
                     mem_index_dict[token.lower()].append([doc_num, 1])
     storePostings.store_postings(mem_index_dict)
-    with open('/Users/allysonyamasaki/PycharmProjects/Assign-3/results/urldict.json', 'w') as file:
+    with open('C:\\Users\\geryj\\Documents\\Index Copy\\urldict.json', 'w') as file:
         json.dump(url_dict, file)
     file.close()
 
