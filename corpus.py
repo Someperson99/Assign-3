@@ -51,7 +51,7 @@ def read_json_files(path: str) -> str:
             pass
         else:
             for word in info:
-                word += " "
+                word = str(word) + " "
                 if tag == "strong" or tag == "b":
                     word = word * 3
                 elif tag == "header" or tag in important_tags[4:]:
