@@ -62,7 +62,7 @@ def parse(word: str) -> list:
                 result.append(stemmer.stem(tempWord.lower()))
                 tempWord = ""
     if tempWord != "":
-        result.append(tempWord.lower())
+        result.append(stemmer.stem(tempWord.lower()))
     return result
 
 
