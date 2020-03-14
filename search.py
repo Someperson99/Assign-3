@@ -21,17 +21,13 @@ def get_postings(word:str) -> list:
 
     for word in q:
         tempWord = ""
-        c = 0
         for char in word:
-            if len(word) > 1:
-                if char == "'" and c == word.rfind("'"):
-                    break
             if char.isalnum():
                 tempWord += char
-            c += 1
-        if tempWord == "":
-            query.append(word)
-        else:
+            else:
+                query.append(tempWord)
+                tempWord = ""
+        if tempWord != "":
             query.append(tempWord)
 
     res = []
