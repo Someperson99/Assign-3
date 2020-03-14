@@ -1,1 +1,17 @@
 # Assign-3
+
+
+Our project first starts with indexBuilder.py which calls build_index(), which as the name suggests builds an index for all of the websites that are provided in the DEV folder. If you do not have an index yet you would run the indexBuilder.py module and specify where the folder that holds the subdomain folders are located. So when running the program will wait  for an input that represents a path. An example of a valid input would be C:\Users\Guest\DEV since it specifies where the subdomain folders are being held. 
+
+Once that path is specified, the information will be stored through the storePostings.py module. As the name suggests it stores all of the information necessary for the search engine to run. At the very top of the module there is a path global constant that represents the path of where all of the files that store posting information will be stored. The posting information is saved in the form of 2 numbers separated by a colon, eg. 245:13 with the first number being the document number and the second one being the number of occurrences the word had in that certain document. The information will be saved in text files with their names representing the word's information that is being saved. 
+
+Going back to indexBuilder.py at the end of the build_index() function a json file will be stored that contains a key value pair of a number in string form and a list of url in string form and the title. The reason why this is done is because in the postings the documents are represented as numbers, so to know where the posting came from there has to be a way to correlate a number and be able to get the url and the title that is associated with that number.
+
+Once indexing is done to run the Search Engine you would run GUI.py. In the init method there will be a self.path attribute, be sure to change this to the path where the urljson.json file from build_index is saved to. GUI.py will then call get_postings from search.py. At the very top of search.py there is another path constant (the reason why there are so many path constants is
+due to the fact that our indexes were stored on different places in different machines) be sure to change that path constant as a string representation of where all of the text files that were created by storePostings. When the search button is clicked, get_tfidf() method calls on the merge_posting() method, which calls on the get_posting method, where the text in the search bar in the GUI is given. 
+
+In the get_postings() method, the query is divided up into tokens. The query is divided into tokens similarly to how the tokenizer works in the index builder. This was intentional to preserve consistency throughout the program. Once they are broken up into tokens it is easy just to add .txt to the end of the token to find all of the postings of the word. 
+
+This is done in the merge_postings() method which will then get all of the postings that contain all of the tokens in the page. 
+
+Once all of the pages that contain all of the tokens are collected, the postings are then sorted by the get_tfidf() method, which returns a numerical value of how relevant the query is to the document that is represented in the posting, using this value the postings are sorted by most relevant and least relevant and then the top 10 results are displayed on the GUI window, along with the total run-time of the search at the bottom. 
